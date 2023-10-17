@@ -20,8 +20,9 @@ class LoadPageDetailsListener
 
     public function __invoke(array $parentModels, PageModel $pageModel): void
     {
+        $pageModel->ipProtected = (bool) $pageModel->ipProtected;
         if (!$pageModel->protected) {
-            return;
+            $pageModel->protected = $pageModel->ipProtected;
         }
 
         $request = $this->requestStack->getCurrentRequest();
@@ -29,12 +30,11 @@ class LoadPageDetailsListener
             return;
         }
 
-        $pageModel->ipProtected = (bool) $pageModel->ipProtected;
-
         if (!$pageModel->ipProtected) {
             foreach ($parentModels as $parentModel) {
-                if ($parentModel->protected && $parentModel->ipProtected && $pageModel->ipProtected === false) {
+                if ($parentModel->ipProtected) {
                     $pageModel->ipProtected = true;
+                    $pageModel->protected = true;
                     $pageModel->allowedIps = $parentModel->allowedIps;
                     break;
                 }
