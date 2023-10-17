@@ -1,4 +1,4 @@
-# Contao Login Registration Bundle
+# Contao Ip Protection Bundle
 
 > This bundle is currently under development and not ready for production use!
 

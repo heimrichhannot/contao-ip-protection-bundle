@@ -1,5 +1,5 @@
 services:
   HeimrichHannot\IpProtectionBundle\:
-    resource: '../src/{DataContainer,Migration,Security}/*'
+    resource: '../src/{DataContainer,EventListener,Migration}/*'
     autoconfigure: true
     autowire: true
