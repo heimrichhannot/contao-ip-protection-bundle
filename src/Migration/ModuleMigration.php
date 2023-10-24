@@ -37,21 +37,22 @@ class ModuleMigration implements MigrationInterface
             return false;
         }
 
+        $run = false;
         foreach ($result->fetchAllAssociative() as $page) {
             if (!$this->isSerializedArray($page['allowedIps'])) {
+                $run = true;
                 if (!$execute) {
-                    return true;
-                } else {
-                    $ips = explode(',', $page['allowedIps']);
-                    $this->connection->executeQuery(
-                        "UPDATE tl_page SET allowedIps = ? WHERE id = ?",
-                        [serialize($ips), $page['id']]
-                    );
+                    return $run;
                 }
+                $ips = explode(',', $page['allowedIps']);
+                $this->connection->executeQuery(
+                    "UPDATE tl_page SET allowedIps = ? WHERE id = ?",
+                    [serialize($ips), $page['id']]
+                );
             }
         }
 
-        return false;
+        return $run;
     }
 
     /**
